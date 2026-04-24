@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@theme {
+    --color-sage-50: #f4f7f4;
+    --color-sage-100: #e5ede5;
+    --color-sage-200: #ceddce;
+    --color-sage-300: #aac2aa;
+    --color-sage-400: #80a180;
+    --color-sage-500: #648464;
+    --color-sage-600: #4d694d;
+    --color-sage-700: #3f543f;
+    --color-sage-800: #354435;
+    --color-sage-900: #2d3a2d;
+    --color-sage-950: #181f18;
+    --color-merah-50: #fef2f2;
+    --color-merah-100: #fee2e2;
+    --color-merah-200: #fecaca;
+    --color-merah-300: #fca5a5;
+    --color-merah-400: #f87171;
+    --color-merah-500: #ef4444;
+    --color-merah-600: #dc2626;
+    --color-merah-700: #b91c1c;
+    --color-merah-800: #991b1b;
+    --color-merah-900: #7f1d1d;
+    --color-merah-950: #450a0a;
+}
+
+:root {
+    --background: #f4f7f4;
+    --foreground: #181f18;
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: 'Inter', sans-serif;
+}
+
+@utility glassmorphism {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}

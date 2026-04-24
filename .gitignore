@@ -1,0 +1,46 @@
+# See https://github.com/github/gitignore/blob/main/Next.js.gitignore
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js
+/.next/
+/out/
+/nextinfo/
+/next-build-id.js
+/next-image-export-optimizer/
+/next-static/
+
+# Production
+/build
+/dist
+/out
+
+# Debug
+/.env*.local
+.env
+
+# Testing
+/coverage
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Zips and archives
+*.zip
+Archive.zip
+next.zip
