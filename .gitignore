@@ -40,6 +40,14 @@
 ehthumbs.db
 Thumbs.db
 
+# Env files
+*.env
+.env*.local
+env.
+
+# Build artifacts
+tsconfig.tsbuildinfo
+
 # Zips and archives
 *.zip
 Archive.zip
