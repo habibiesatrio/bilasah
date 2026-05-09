@@ -29,34 +29,41 @@ export default function Location() {
     return Number.isNaN(parsed.getTime()) ? new Date(fallback) : parsed;
   };
 
-  const weddingDate = parseLocalDateTime(settings?.wedding_date, "2026-04-23T09:00:00");
-  const weddingEndDate = parseLocalDateTime(settings?.wedding_end_time, "2026-04-23T13:00:00");
+  const weddingDate = parseLocalDateTime(settings?.wedding_date, "2026-04-23T08:00:00");
+
+  const eventStartDate = new Date(weddingDate);
+  eventStartDate.setHours(8, 0, 0, 0);
+  const eventEndDate = new Date(weddingDate);
+  eventEndDate.setHours(12, 0, 0, 0);
 
   const formatTimeForCalendar = (date: Date) => {
     return date.toISOString().replace(/-|:|\.\d+/g, "");
   };
 
-  const startTime = formatTimeForCalendar(weddingDate);
-  const endTime = formatTimeForCalendar(weddingEndDate);
+  const startTime = formatTimeForCalendar(eventStartDate);
+  const endTime = formatTimeForCalendar(eventEndDate);
 
   const eventTitle = "Pernikahan Habibie dan Lathifa";
-  const eventDescription = "Kami mengundang Anda untuk merayakan hari bahagia kami.";
-  const eventLocation = "Griya Sekar Kinasih. Q299+8J7, RT.004/RW.012, Duren Jaya, Kec. Bekasi Tim., Kota Bks, Jawa Barat 17112";
+  const eventDescription = "Kami mengundang Anda untuk hadir di pernikahan Habibie & Lathifa di Griya Sekar Kinasih.";
+  const eventLocation = "Griya Sekar Kinasih, Bekasi";
 
   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startTime}/${endTime}&details=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
 
-  // Apple/ICS format
-  const icsContent = `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-URL:${typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : ''}
-DTSTART:${startTime}
-DTEND:${endTime}
-SUMMARY:${eventTitle}
-DESCRIPTION:${eventDescription}
-LOCATION:${eventLocation}
-END:VEVENT
-END:VCALENDAR`;
+  const icsBase = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Wedding Invitation//EN",
+    "BEGIN:VEVENT",
+    `DTSTART:${startTime}`,
+    `DTEND:${endTime}`,
+    `SUMMARY:${eventTitle}`,
+    `DESCRIPTION:${eventDescription}`,
+    `LOCATION:${eventLocation}`,
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].join("\n");
+
+  const icsContent = `data:text/calendar;charset=utf8,${encodeURIComponent(icsBase)}`;
 
   const formattedDate = weddingDate.toLocaleDateString("id-ID", {
     weekday: 'long',
@@ -65,18 +72,9 @@ END:VCALENDAR`;
     year: 'numeric'
   });
 
-  const formatLocalClock = (date: Date) => {
-    const hh = String(date.getHours()).padStart(2, "0");
-    const mm = String(date.getMinutes()).padStart(2, "0");
-    return `${hh}.${mm}`;
-  };
-
-  const locationStartTimeText = settings?.location_start_time_text?.trim() || "";
-  const locationEndTimeText = settings?.location_end_time_text?.trim() || "";
-
-  const formattedTime = locationStartTimeText && locationEndTimeText
-    ? `${locationStartTimeText} - ${locationEndTimeText}`
-    : `${formatLocalClock(weddingDate)} - ${formatLocalClock(weddingEndDate)} WIB`;
+  const googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=Griya+Sekar+Kinasih+Bekasi&travelmode=driving";
+  const akadTime = "08.00 WIB";
+  const resepsiTime = "10.00 WIB";
 
 
   return (
@@ -118,7 +116,7 @@ END:VCALENDAR`;
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-jawa-dark">Waktu</h3>
-                  <p className="text-jawa-brown">{formattedTime}</p>
+                  <p className="text-jawa-brown">Akad 08.00 WIB • Resepsi 10.00 WIB</p>
                 </div>
               </div>
 
@@ -135,58 +133,67 @@ END:VCALENDAR`;
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <motion.a
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  href={googleCalendarUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center px-6 py-4 bg-jawa-ivory border border-jawa-gold/35 text-jawa-dark rounded-2xl font-bold text-sm shadow-sm hover:bg-[#efe1c6] transition-all"
+                >
+                  <img src="https://www.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_31_2x.png" className="w-5 h-5 mr-3" alt="Google" />
+                  Tambahkan ke Google Calendar
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  href={icsContent}
+                  download="Wedding_Habibie_Lathifa.ics"
+                  className="flex items-center justify-center px-6 py-4 bg-jawa-ivory border border-jawa-gold/35 text-jawa-dark rounded-2xl font-bold text-sm shadow-sm hover:bg-[#efe1c6] transition-all"
+                >
+                  <Calendar className="w-5 h-5 mr-3 text-jawa-maroon" />
+                  Unduh Kalender
+                </motion.a>
+              </div>
+
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                href={googleCalendarUrl}
+                href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center px-6 py-4 bg-jawa-ivory border border-jawa-gold/35 text-jawa-dark rounded-2xl font-bold text-sm shadow-sm hover:bg-[#efe1c6] transition-all"
+                className="w-full flex items-center justify-center px-6 py-4 bg-jawa-maroon text-jawa-cream rounded-2xl font-bold shadow-lg hover:bg-[#5f2323] transition-all"
               >
-                <img src="https://www.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_31_2x.png" className="w-5 h-5 mr-3" alt="Google" />
-                Google Calendar
+                <ExternalLink className="w-5 h-5 mr-3" />
+                Panduan Arah di Google Maps
               </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                href={icsContent}
-                download="Wedding_Habibie_Lathifa.ics"
-                className="flex items-center justify-center px-6 py-4 bg-jawa-ivory border border-jawa-gold/35 text-jawa-dark rounded-2xl font-bold text-sm shadow-sm hover:bg-[#efe1c6] transition-all"
-              >
-                <Calendar className="w-5 h-5 mr-3 text-jawa-maroon" />
-                Apple Calendar
-              </motion.a>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="p-6 bg-white border border-jawa-gold/30 rounded-3xl shadow-lg">
+                  <p className="text-sm uppercase tracking-[0.28em] text-jawa-maroon font-bold mb-3">Akad</p>
+                  <p className="text-4xl font-bold text-jawa-dark mb-2">{akadTime}</p>
+                  <p className="text-jawa-brown leading-relaxed">Acara akad dimulai tepat pada waktu yang tercantum.</p>
+                </div>
+                <div className="p-6 bg-white border border-jawa-gold/30 rounded-3xl shadow-lg">
+                  <p className="text-sm uppercase tracking-[0.28em] text-jawa-maroon font-bold mb-3">Resepsi</p>
+                  <p className="text-4xl font-bold text-jawa-dark mb-2">{resepsiTime}</p>
+                  <p className="text-jawa-brown leading-relaxed">Acara resepsi dimulai setelah akad selesai.</p>
+                </div>
+              </div>
+
+              <div className="p-6 bg-white border border-jawa-gold/35 rounded-3xl shadow-lg">
+                <h3 className="text-xl font-bold text-jawa-dark mb-3">Informasi Lokasi</h3>
+                <p className="text-jawa-brown leading-relaxed mb-4">
+                  Lokasi acara berada di Griya Sekar Kinasih, Bekasi. Silakan gunakan tombol Google Maps untuk mendapatkan arah yang akurat dan profesional.
+                </p>
+                <p className="text-sm text-jawa-maroon uppercase tracking-[0.24em] font-semibold mb-2">Alamat Utama</p>
+                <p className="text-jawa-brown leading-relaxed">
+                  Q299+8J7, RT.004/RW.012, Duren Jaya, Kec. Bekasi Tim., Kota Bekasi, Jawa Barat 17112.
+                </p>
+              </div>
             </div>
-
-            <motion.a
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              href="https://maps.app.goo.gl/LFJ2xYJbXZVGvzrM6"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center px-6 py-4 bg-jawa-maroon text-jawa-cream rounded-2xl font-bold shadow-lg hover:bg-[#5f2323] transition-all"
-            >
-              <ExternalLink className="w-5 h-5 mr-3" />
-              Buka di Google Maps
-            </motion.a>
-          </motion.div>
-
-          {/* Map Embed */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="h-[450px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-jawa-gold/35 jawa-frame"
-          >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.121545674!2d107.0182657!3d-6.2477383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698ef65f573e65%3A0xc3f140026e95c1a8!2sGriya%20Sekar%20Kinasih!5e0!3m2!1sid!2sid!4v1713861234567!5m2!1sid!2sid"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
           </motion.div>
         </div>
       </div>

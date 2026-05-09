@@ -41,7 +41,7 @@ export default function Hero({ onOpen }: HeroProps) {
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop')" }}
+        style={{ backgroundImage: `url('${settings?.hero_image_url?.trim() || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop"}')` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-[#2f2118]/75 via-[#3b2a1f]/70 to-[#2a1d14]/75 backdrop-blur-[2px]" />
         <div className="absolute inset-0 jawa-pattern opacity-20 mix-blend-soft-light" />
@@ -79,6 +79,11 @@ export default function Hero({ onOpen }: HeroProps) {
           <p className="uppercase tracking-[0.4em] text-white/80 text-xs md:text-sm font-medium">
             The Wedding Of
           </p>
+          {settings?.hero_date_text ? (
+            <p className="text-sm md:text-base text-white/80 mt-2">
+              {settings.hero_date_text}
+            </p>
+          ) : null}
 
           <div className="space-y-3">
             <div className="flex flex-col items-center">
@@ -104,6 +109,11 @@ export default function Hero({ onOpen }: HeroProps) {
             </div>
           </div>
 
+          {settings?.hero_quote_bottom ? (
+            <p className="text-sm md:text-base text-white/80 italic mt-3">
+              {settings.hero_quote_bottom}
+            </p>
+          ) : null}
 
         </motion.div>
 

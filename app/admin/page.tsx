@@ -814,7 +814,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Foto Header (Upload JPG)</label>
+                  <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Background Buka Undangan / Foto Header (Upload JPG)</label>
                   <input
                     type="file"
                     accept=".jpg,image/jpeg"
@@ -842,7 +842,7 @@ export default function AdminDashboard() {
                     onChange={(e) => setHeroQuoteBottom(e.target.value)}
                     rows={3}
                     className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm resize-y"
-                    placeholder="Tulis quote tambahan yang akan tampil di bawah foto header"
+                    placeholder="Tulis quote tambahan yang akan tampil di bawah nama pasangan di layar pembuka"
                   />
                 </div>
 

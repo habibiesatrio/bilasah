@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Guestbook from "@/components/Guestbook";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
-import LoveStory from "@/components/LoveStory";
 import Gallery from "@/components/Gallery";
 import Location from "@/components/Location";
 import CoupleIntro from "@/components/CoupleIntro";
@@ -155,11 +154,6 @@ export default function Home() {
             {/* Couple Intro Section */}
             <section id="couple-intro">
               <CoupleIntro />
-            </section>
-
-            {/* Love Story Section */}
-            <section id="story">
-              <LoveStory />
             </section>
 
             {/* Gallery Section */}
