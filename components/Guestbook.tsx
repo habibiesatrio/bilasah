@@ -133,7 +133,7 @@ function GuestbookContent() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="bg-merah-50 border border-merah-200 rounded-2xl p-4 flex items-start space-x-3 text-merah-700 overflow-hidden"
+              className="bg-[#f6ece0] border border-jawa-gold/40 rounded-2xl p-4 flex items-start space-x-3 text-jawa-maroon overflow-hidden jawa-frame"
             >
               <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
               <div className="text-sm">
@@ -148,45 +148,45 @@ function GuestbookContent() {
         <div className="grid grid-cols-2 gap-4">
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="glassmorphism p-6 flex items-center justify-between border-sage-300 bg-white/40"
+            className="glassmorphism jawa-frame p-6 flex items-center justify-between border border-jawa-gold/35 bg-jawa-cream/80"
           >
             <div>
-              <p className="text-sage-700 text-sm uppercase tracking-wider font-semibold">Total Hadir</p>
+              <p className="text-jawa-brown text-sm uppercase tracking-wider font-semibold">Total Hadir</p>
               <div className="flex items-baseline space-x-1">
-                <p className="text-3xl font-bold text-merah-700">{stats.totalTamu}</p>
-                <p className="text-xs text-sage-500 font-medium italic">Tamu</p>
+                <p className="text-3xl font-bold text-jawa-maroon">{stats.totalTamu}</p>
+                <p className="text-xs text-jawa-brown/70 font-medium italic">Tamu</p>
               </div>
             </div>
-            <div className="bg-merah-100 p-3 rounded-full">
-              <Users className="text-merah-600 w-6 h-6" />
+            <div className="bg-[#efe1c6] p-3 rounded-full border border-jawa-gold/35">
+              <Users className="text-jawa-maroon w-6 h-6" />
             </div>
           </motion.div>
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="glassmorphism p-6 flex items-center justify-between border-sage-300 bg-white/40"
+            className="glassmorphism jawa-frame p-6 flex items-center justify-between border border-jawa-gold/35 bg-jawa-cream/80"
           >
             <div>
-              <p className="text-sage-700 text-sm uppercase tracking-wider font-semibold">Tidak Hadir</p>
-              <p className="text-3xl font-bold text-sage-600">{stats.tidakHadir}</p>
+              <p className="text-jawa-brown text-sm uppercase tracking-wider font-semibold">Tidak Hadir</p>
+              <p className="text-3xl font-bold text-jawa-dark">{stats.tidakHadir}</p>
             </div>
-            <div className="bg-sage-100 p-3 rounded-full">
-              <Users className="text-sage-600 w-6 h-6" />
+            <div className="bg-[#efe1c6] p-3 rounded-full border border-jawa-gold/35">
+              <Users className="text-jawa-brown w-6 h-6" />
             </div>
           </motion.div>
         </div>
 
         {/* Main Card */}
-        <div className="glassmorphism p-8 space-y-8 border-sage-300 bg-white/30 backdrop-blur-xl">
+        <div className="glassmorphism jawa-frame p-8 space-y-8 border border-jawa-gold/35 bg-jawa-cream/75 backdrop-blur-xl">
           <div className="text-center space-y-4">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200 }}
             >
-              <Heart className="w-12 h-12 text-merah-600 mx-auto fill-merah-600/20" />
+              <Heart className="w-12 h-12 text-jawa-maroon mx-auto fill-jawa-maroon/20" />
             </motion.div>
-            <h1 className="text-5xl font-extrabold text-merah-800 tracking-tight">Reservasi</h1>
-            <p className="text-sage-800 text-lg italic">Konfirmasi Kehadiran & Doa Restu</p>
+            <h1 className="text-5xl font-extrabold text-jawa-dark tracking-tight">Reservasi</h1>
+            <p className="text-jawa-brown text-lg italic">Konfirmasi Kehadiran & Doa Restu</p>
           </div>
 
           <AnimatePresence mode="wait">
@@ -198,7 +198,7 @@ function GuestbookContent() {
                 className="bg-green-50/50 border border-green-200 rounded-3xl p-8 text-center space-y-4"
               >
                 <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto" />
-                <h3 className="text-2xl font-bold text-green-800">Terima Kasih, Sayang!</h3>
+                <h3 className="text-2xl font-bold text-green-800">Terima Kasih, with Love!</h3>
                 <p className="text-green-700 italic">
                   Konfirmasi Anda telah kami terima dengan penuh sukacita. Doa restu Anda sangat berarti bagi awal perjalanan baru kami. Sampai jumpa di hari bahagia kami!
                 </p>
@@ -301,7 +301,7 @@ function GuestbookContent() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="block w-full px-4 py-4 border border-sage-200 rounded-2xl leading-5 bg-white/50 placeholder-sage-400 focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 sm:text-sm transition-all shadow-sm hover:bg-white/80 resize-none"
-                    placeholder="Tuliskan pesan manis untuk Habibie & Lala..."
+                    placeholder="Tuliskan pesan manis untuk Habibie & Lathifa..."
                     required
                   />
                 </div>

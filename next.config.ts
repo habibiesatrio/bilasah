@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+
+const appRoot = path.resolve(__dirname);
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -11,7 +14,7 @@ const nextConfig: NextConfig = {
     ],
   },
   turbopack: {
-    root: __dirname, // Explicitly set the workspace root
+    root: appRoot,
   },
 };
 

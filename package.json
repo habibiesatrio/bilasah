@@ -5,8 +5,8 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "node server.js",
-        "lint": "next lint"
+        "start": "next start",
+        "start:prod": "next start -p $PORT"
     },
     "dependencies": {
         "@supabase/supabase-js": "^2.104.0",
@@ -16,7 +16,7 @@
         "dotenv": "^17.4.2",
         "framer-motion": "^12.38.0",
         "lucide-react": "latest",
-        "next": "latest",
+        "next": "^16.2.4",
         "qrcode": "^1.5.4",
         "react": "latest",
         "react-dom": "latest",

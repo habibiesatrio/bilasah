@@ -55,12 +55,12 @@ export default function Countdown() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="glassmorphism bg-white/40 backdrop-blur-md p-4 md:p-6 text-center border-sage-200"
+          className="glassmorphism jawa-frame bg-[#f8f3e8]/80 backdrop-blur-md p-4 md:p-6 text-center border border-jawa-gold/35"
         >
-          <span className="block text-2xl md:text-4xl font-bold text-merah-700 font-serif">
+          <span className="block text-2xl md:text-4xl font-bold text-jawa-maroon font-serif">
             {item.value.toString().padStart(2, "0")}
           </span>
-          <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-sage-600 font-medium">
+          <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-jawa-brown font-medium">
             {item.label}
           </span>
         </motion.div>

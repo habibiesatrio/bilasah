@@ -17,6 +17,15 @@ export interface GalleryItem {
 export interface WeddingSettings {
   wedding_date: string;
   wedding_end_time: string;
+  hero_date_text: string;
+  hero_image_url: string;
+  hero_quote_bottom: string;
+  music_url: string;
+  music_title: string;
+  groom_photo_url: string;
+  bride_photo_url: string;
+  location_start_time_text: string;
+  location_end_time_text: string;
   love_story: LoveStoryItem[];
   gallery: GalleryItem[];
 }
@@ -46,6 +55,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         setSettings({
           wedding_date: data.wedding_date,
           wedding_end_time: data.wedding_end_time,
+          hero_date_text: data.hero_date_text || "",
+          hero_image_url: data.hero_image_url || "",
+          hero_quote_bottom: data.hero_quote_bottom || "",
+          music_url: data.music_url || "",
+          music_title: data.music_title || "",
+          groom_photo_url: data.groom_photo_url || "",
+          bride_photo_url: data.bride_photo_url || "",
+          location_start_time_text: data.location_start_time_text || "",
+          location_end_time_text: data.location_end_time_text || "",
           love_story: data.love_story || [],
           gallery: data.gallery || [],
         });
@@ -56,6 +74,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       setSettings({
         wedding_date: "2026-04-23T09:00:00",
         wedding_end_time: "2026-04-23T13:00:00",
+        hero_date_text: "23 April 2026",
+        hero_image_url: "",
+        hero_quote_bottom: "",
+        music_url: "",
+        music_title: "",
+        groom_photo_url: "",
+        bride_photo_url: "",
+        location_start_time_text: "",
+        location_end_time_text: "",
         love_story: [],
         gallery: [],
       });

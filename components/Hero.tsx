@@ -2,9 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { MailOpen, Calendar, Heart } from "lucide-react";
+import { MailOpen, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useSettings } from "@/lib/SettingsContext";
 
 interface HeroProps {
   onOpen: () => void;
@@ -20,37 +20,20 @@ interface Particle {
 
 export default function Hero({ onOpen }: HeroProps) {
   const searchParams = useSearchParams();
-  const guestName = searchParams.get("to");
+  const guestName = searchParams.get("to")?.trim();
   const [particles, setParticles] = useState<Particle[]>([]);
-  const [weddingDate, setWeddingDate] = useState<string>("");
+  const { settings } = useSettings();
 
   useEffect(() => {
-    // Generate particles only on client to avoid hydration mismatch
-    const newParticles = [...Array(6)].map((_, i) => ({
+    // Generate floating particles
+    const newParticles: Particle[] = Array.from({ length: 12 }, (_, i) => ({
       id: i,
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
-      duration: 10 + Math.random() * 10,
-      delay: Math.random() * 5,
+      duration: 15 + Math.random() * 10,
+      delay: Math.random() * 5
     }));
     setParticles(newParticles);
-
-    const fetchWeddingDate = async () => {
-      const { data, error } = await supabase
-        .from("settings")
-        .select("value")
-        .eq("key", "wedding_date")
-        .single();
-
-      if (error) {
-        console.error("Error fetching wedding date:", error);
-        return;
-      }
-
-      setWeddingDate(data.value);
-    };
-
-    fetchWeddingDate();
   }, []);
 
   return (
@@ -60,19 +43,20 @@ export default function Hero({ onOpen }: HeroProps) {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop')" }}
       >
-        <div className="absolute inset-0 bg-sage-950/50 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2f2118]/75 via-[#3b2a1f]/70 to-[#2a1d14]/75 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 jawa-pattern opacity-20 mix-blend-soft-light" />
       </div>
 
       {/* Decorative Elements */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute -top-24 -left-24 w-64 h-64 border border-white/10 rounded-full"
+        className="absolute -top-24 -left-24 w-64 h-64 border border-jawa-gold/20 rounded-full"
       />
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        className="absolute -bottom-32 -right-32 w-96 h-96 border border-white/10 rounded-full"
+        className="absolute -bottom-32 -right-32 w-96 h-96 border border-jawa-gold/20 rounded-full"
       />
 
       {/* Content */}
@@ -96,27 +80,31 @@ export default function Hero({ onOpen }: HeroProps) {
             The Wedding Of
           </p>
 
-          <h1 className="text-4xl md:text-6xl font-serif font-extrabold text-white drop-shadow-2xl">
-            Habibie Satrio Nugroho, S.Kom., M.Han
-          </h1>
-          <h1 className="text-4xl md:text-6xl font-serif font-extrabold text-white drop-shadow-2xl">
-            &
-          </h1>
-          <h1 className="text-4xl md:text-6xl font-serif font-extrabold text-white drop-shadow-2xl">
-            Lathifa Ailia Putri, S.H.
-          </h1>
-        </motion.div>
+          <div className="space-y-3">
+            <div className="flex flex-col items-center">
+              <h1 className="text-3xl md:text-6xl font-serif font-extrabold text-white drop-shadow-2xl leading-tight md:whitespace-nowrap">
+                Habibie Satrio Nugroho
+              </h1>
+              <p className="text-base md:text-xl text-white/85 tracking-[0.12em] uppercase mt-1">
+                S.Kom., M.Han
+              </p>
+            </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="flex items-center justify-center space-x-3 text-white/90"
-        >
-          <Calendar className="w-5 h-5 text-merah-400" />
-          <p className="text-xl md:text-2xl font-light italic tracking-wide">
-            {weddingDate || "Tanggal Belum Ditentukan"}
-          </p>
+            <h2 className="text-3xl md:text-5xl font-serif font-semibold text-white/95 drop-shadow-xl">
+              &
+            </h2>
+
+            <div className="flex flex-col items-center">
+              <h1 className="text-3xl md:text-6xl font-serif font-extrabold text-white drop-shadow-2xl leading-tight">
+                Lathifa Ailia Putri
+              </h1>
+              <p className="text-base md:text-xl text-white/85 tracking-[0.12em] uppercase mt-1">
+                S.H.
+              </p>
+            </div>
+          </div>
+
+
         </motion.div>
 
         {guestName && (
@@ -124,13 +112,14 @@ export default function Hero({ onOpen }: HeroProps) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.5, duration: 0.8 }}
-            className="py-6 border-y border-white/20"
+            className="mx-auto w-full max-w-md py-5 md:py-6 border-y border-white/20 text-white"
           >
-            <p className="text-white/70 text-sm mb-1 uppercase tracking-widest">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
+            <p className="text-sm md:text-base text-white/80 tracking-wide">Kepada Yth.</p>
+            <p className="mt-1 text-base md:text-lg text-white/90">Bapak/Ibu/Saudara/i</p>
+            <h2 className="mt-3 text-2xl md:text-3xl font-bold leading-tight">
               {guestName}
             </h2>
-            <p className="text-white/70 text-sm mt-2 italic">Kamu Diundang ke Pernikahan Kami</p>
+            <p className="mt-3 text-sm md:text-base text-white/80 italic">Di Tempat</p>
           </motion.div>
         )}
 
@@ -144,7 +133,7 @@ export default function Hero({ onOpen }: HeroProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onOpen}
-            className="group relative inline-flex items-center px-8 py-4 bg-white text-sage-900 rounded-full font-bold shadow-2xl transition-all hover:bg-merah-50 hover:text-merah-900"
+            className="group relative inline-flex items-center px-8 py-4 bg-jawa-cream text-jawa-dark rounded-full font-bold shadow-2xl border border-jawa-gold/40 transition-all hover:bg-[#efe1c6] hover:text-jawa-maroon"
           >
             <MailOpen className="mr-3 w-5 h-5 group-hover:animate-bounce" />
             Buka Undangan

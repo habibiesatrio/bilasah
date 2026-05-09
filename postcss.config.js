@@ -1,6 +1,10 @@
+const appRoot = __dirname;
+
 module.exports = {
     plugins: {
-        '@tailwindcss/postcss': {},
+        '@tailwindcss/postcss': {
+            base: appRoot,
+        },
         autoprefixer: {},
     },
 }

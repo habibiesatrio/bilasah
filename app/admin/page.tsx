@@ -24,6 +24,7 @@ import {
   Clock,
   Heart as HeartIcon,
   Image as GalleryIcon,
+  Music,
   Plus,
   Save
 } from "lucide-react";
@@ -61,9 +62,22 @@ export default function AdminDashboard() {
   // Content Settings States
   const [weddingDate, setWeddingDate] = useState<string>("");
   const [weddingEndTime, setWeddingEndTime] = useState<string>("");
+  const [heroDateText, setHeroDateText] = useState<string>("");
+  const [heroImageUrl, setHeroImageUrl] = useState<string>("");
+  const [heroQuoteBottom, setHeroQuoteBottom] = useState<string>("");
+  const [musicUrl, setMusicUrl] = useState<string>("");
+  const [musicTitle, setMusicTitle] = useState<string>("");
+  const [groomPhotoUrl, setGroomPhotoUrl] = useState<string>("");
+  const [bridePhotoUrl, setBridePhotoUrl] = useState<string>("");
+  const [locationStartTimeText, setLocationStartTimeText] = useState<string>("");
+  const [locationEndTimeText, setLocationEndTimeText] = useState<string>("");
   const [loveStory, setLoveStory] = useState<LoveStoryItem[]>([]);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingHero, setIsUploadingHero] = useState(false);
+  const [isUploadingMusic, setIsUploadingMusic] = useState(false);
+  const [isUploadingGroom, setIsUploadingGroom] = useState(false);
+  const [isUploadingBride, setIsUploadingBride] = useState(false);
 
   const router = useRouter();
 
@@ -87,10 +101,119 @@ export default function AdminDashboard() {
     if (settings) {
       setWeddingDate(settings.wedding_date.slice(0, 16)); // Format YYYY-MM-DDTHH:mm
       setWeddingEndTime(settings.wedding_end_time.slice(0, 16));
+      setHeroDateText(settings.hero_date_text || "");
+      setHeroImageUrl(settings.hero_image_url || "");
+      setHeroQuoteBottom(settings.hero_quote_bottom || "");
+      setMusicUrl(settings.music_url || "");
+      setMusicTitle(settings.music_title || "");
+      setGroomPhotoUrl(settings.groom_photo_url || "");
+      setBridePhotoUrl(settings.bride_photo_url || "");
+      setLocationStartTimeText(settings.location_start_time_text || "");
+      setLocationEndTimeText(settings.location_end_time_text || "");
       setLoveStory(settings.love_story || []);
       setGallery(settings.gallery || []);
     }
   }, [settings]);
+
+  const uploadJpgToStorage = async (file: File, filenamePrefix: string) => {
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    if (ext !== "jpg") {
+      throw new Error("Hanya file .jpg yang diperbolehkan.");
+    }
+
+    const filePath = `public/${filenamePrefix}-${Date.now()}.jpg`;
+    const { error: uploadError } = await supabase.storage
+      .from("photo-kami")
+      .upload(filePath, file, { upsert: true, contentType: "image/jpeg" });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage.from("photo-kami").getPublicUrl(filePath);
+    return data.publicUrl;
+  };
+
+  const uploadMp3ToStorage = async (file: File) => {
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    if (ext !== "mp3") {
+      throw new Error("Hanya file .mp3 yang diperbolehkan.");
+    }
+
+    const filePath = `public/music-${Date.now()}.mp3`;
+    const { error: uploadError } = await supabase.storage
+      .from("photo-kami")
+      .upload(filePath, file, { upsert: true, contentType: "audio/mpeg" });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage.from("photo-kami").getPublicUrl(filePath);
+    return data.publicUrl;
+  };
+
+  const handleUploadHero = async (file: File) => {
+    setIsUploadingHero(true);
+    try {
+      const publicUrl = await uploadJpgToStorage(file, "hero");
+      setHeroImageUrl(publicUrl);
+    } catch (error: any) {
+      alert(error?.message || "Gagal upload foto hero.");
+    } finally {
+      setIsUploadingHero(false);
+    }
+  };
+
+  const handleUploadMusic = async (file: File) => {
+    setIsUploadingMusic(true);
+    try {
+      const publicUrl = await uploadMp3ToStorage(file);
+      setMusicUrl(publicUrl);
+      if (!musicTitle) {
+        setMusicTitle(file.name.replace(/\.mp3$/i, ""));
+      }
+    } catch (error: any) {
+      alert(error?.message || "Gagal upload musik.");
+    } finally {
+      setIsUploadingMusic(false);
+    }
+  };
+
+  const handleUploadGroom = async (file: File) => {
+    setIsUploadingGroom(true);
+    try {
+      const publicUrl = await uploadJpgToStorage(file, "groom");
+      setGroomPhotoUrl(publicUrl);
+    } catch (error: any) {
+      alert(error?.message || "Gagal upload foto mempelai pria.");
+    } finally {
+      setIsUploadingGroom(false);
+    }
+  };
+
+  const handleUploadBride = async (file: File) => {
+    setIsUploadingBride(true);
+    try {
+      const publicUrl = await uploadJpgToStorage(file, "bride");
+      setBridePhotoUrl(publicUrl);
+    } catch (error: any) {
+      alert(error?.message || "Gagal upload foto mempelai wanita.");
+    } finally {
+      setIsUploadingBride(false);
+    }
+  };
+
+  const handleUploadGallery = async (file: File, index: number) => {
+    try {
+      const publicUrl = await uploadJpgToStorage(file, "gallery");
+      const newGallery = [...gallery];
+      newGallery[index].url = publicUrl;
+      setGallery(newGallery);
+    } catch (error: any) {
+      alert(error?.message || "Gagal upload foto galeri.");
+    }
+  };
 
   const handleSaveSettings = async () => {
     setIsSaving(true);
@@ -100,6 +223,15 @@ export default function AdminDashboard() {
         .update({
           wedding_date: weddingDate,
           wedding_end_time: weddingEndTime,
+          hero_date_text: heroDateText,
+          hero_image_url: heroImageUrl,
+          hero_quote_bottom: heroQuoteBottom,
+          music_url: musicUrl,
+          music_title: musicTitle,
+          groom_photo_url: groomPhotoUrl,
+          bride_photo_url: bridePhotoUrl,
+          location_start_time_text: locationStartTimeText,
+          location_end_time_text: locationEndTimeText,
           love_story: loveStory,
           gallery: gallery,
           updated_at: new Date().toISOString()
@@ -172,15 +304,105 @@ export default function AdminDashboard() {
   };
 
   const copyToClipboard = (id: string, link: string) => {
-    navigator.clipboard.writeText(link);
-    setInvitations(prev =>
-      prev.map(inv => inv.id === id ? { ...inv, isCopied: true } : inv)
-    );
-    setTimeout(() => {
+    // Selalu coba metode tercepat dulu (Clipboard API)
+    // Jika gagal, otomatis fallback ke metode tradisional
+    const doCopy = () => {
       setInvitations(prev =>
-        prev.map(inv => inv.id === id ? { ...inv, isCopied: false } : inv)
+        prev.map(inv => inv.id === id ? { ...inv, isCopied: true } : inv)
       );
-    }, 2000);
+      setTimeout(() => {
+        setInvitations(prev =>
+          prev.map(inv => inv.id === id ? { ...inv, isCopied: false } : inv)
+        );
+      }, 2000);
+    };
+
+    // Coba Clipboard API (berfungsi di HTTP juga untuk localhost)
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(link)
+        .then(doCopy)
+        .catch(() => {
+          // Jika gagal, gunakan fallback
+          fallbackCopy(link, id, doCopy);
+        });
+    } else {
+      // Browser tidak support Clipboard API
+      fallbackCopy(link, id, doCopy);
+    }
+  };
+
+  // Fallback menggunakan metode tradisional (work di HTTP)
+  const fallbackCopy = (text: string, id: string, onSuccess: () => void) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    textArea.style.opacity = "0";
+    textArea.setAttribute("readonly", "");
+    document.body.appendChild(textArea);
+    
+    // Select text
+    textArea.select();
+    textArea.setSelectionRange(0, 99999); // Untuk mobile
+    
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        onSuccess();
+      } else {
+        // Jika execCommand gagal, coba metode lain
+        tryCopyByRange(text, id);
+      }
+    } catch (err) {
+      console.error("Fallback copy error:", err);
+      tryCopyByRange(text, id);
+    }
+    
+    document.body.removeChild(textArea);
+  };
+
+  // Metode alternatif jika execCommand tidak tersedia
+  const tryCopyByRange = (text: string, id: string) => {
+    try {
+      const range = document.createRange();
+      range.selectNode(document.body);
+      window.getSelection()?.removeAllRanges();
+      window.getSelection()?.addRange(range);
+      const success = document.execCommand("copy");
+      window.getSelection()?.removeAllRanges();
+      
+      if (success) {
+        setInvitations(prev =>
+          prev.map(inv => inv.id === id ? { ...inv, isCopied: true } : inv)
+        );
+        setTimeout(() => {
+          setInvitations(prev =>
+            prev.map(inv => inv.id === id ? { ...inv, isCopied: false } : inv)
+          );
+        }, 2000);
+      } else {
+        showCopyFallback(text);
+      }
+    } catch (e) {
+      showCopyFallback(text);
+    }
+  };
+
+  // Tampilkan link sebagai fallback terakhir
+  const showCopyFallback = (text: string) => {
+    // Coba prompt — ini bisa work di mobile
+    const success = window.prompt("Salin link ini:", text);
+    if (success) {
+      setInvitations(prev =>
+        prev.map(inv => inv.id === text ? { ...inv, isCopied: true } : inv)
+      );
+      setTimeout(() => {
+        setInvitations(prev =>
+          prev.map(inv => inv.id === text ? { ...inv, isCopied: false } : inv)
+        );
+      }, 2000);
+    }
   };
 
   const deleteInvitation = (id: string) => {
@@ -579,6 +801,166 @@ export default function AdminDashboard() {
                     />
                   </div>
                 </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Teks Tanggal Hero (Custom)</label>
+                  <textarea
+                    value={heroDateText}
+                    onChange={(e) => setHeroDateText(e.target.value)}
+                    rows={3}
+                    className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm resize-y"
+                    placeholder="Contoh: Kamis, 23 April 2026&#10;Pukul 09.00 WIB - Selesai"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Foto Header (Upload JPG)</label>
+                  <input
+                    type="file"
+                    accept=".jpg,image/jpeg"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleUploadHero(file);
+                    }}
+                    className="w-full p-3 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-sage-100 file:text-sage-700"
+                  />
+                  <p className="text-xs text-sage-500 italic">
+                    Upload hanya file JPG ke Supabase Storage (`photo-kami/public/*`).
+                  </p>
+                  {isUploadingHero && <p className="text-xs text-merah-600">Mengunggah foto header...</p>}
+                  {heroImageUrl && (
+                    <div className="h-24 w-full md:w-64 rounded-xl overflow-hidden bg-sage-100 border border-sage-200">
+                      <img src={heroImageUrl} alt="Preview Hero" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Quote Tambahan Header</label>
+                  <textarea
+                    value={heroQuoteBottom}
+                    onChange={(e) => setHeroQuoteBottom(e.target.value)}
+                    rows={3}
+                    className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm resize-y"
+                    placeholder="Tulis quote tambahan yang akan tampil di bawah foto header"
+                  />
+                </div>
+
+                <div className="space-y-4 rounded-3xl border border-sage-100 bg-white/55 p-5">
+                  <h4 className="flex items-center text-lg font-bold text-sage-900">
+                    <Music className="w-5 h-5 mr-2 text-merah-600" />
+                    Musik Undangan
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Judul Musik</label>
+                      <input
+                        type="text"
+                        value={musicTitle}
+                        onChange={(e) => setMusicTitle(e.target.value)}
+                        className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                        placeholder="Contoh: Wedding Instrumental"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Upload Musik MP3</label>
+                      <input
+                        type="file"
+                        accept=".mp3,audio/mpeg"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleUploadMusic(file);
+                        }}
+                        className="w-full p-3 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-sage-100 file:text-sage-700"
+                      />
+                      {isUploadingMusic && <p className="text-xs text-merah-600">Mengunggah musik...</p>}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">URL Musik</label>
+                    <input
+                      type="url"
+                      value={musicUrl}
+                      onChange={(e) => setMusicUrl(e.target.value)}
+                      className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                      placeholder="https://.../musik.mp3"
+                    />
+                    <p className="text-xs text-sage-500 italic">
+                      Bisa upload MP3 atau isi URL audio publik. Setelah disimpan, musik muncul saat undangan dibuka.
+                    </p>
+                  </div>
+
+                  {musicUrl && (
+                    <audio controls src={musicUrl} className="w-full" />
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Foto Mempelai Pria (Upload JPG)</label>
+                    <input
+                      type="file"
+                      accept=".jpg,image/jpeg"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleUploadGroom(file);
+                      }}
+                      className="w-full p-3 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-sage-100 file:text-sage-700"
+                    />
+                    {isUploadingGroom && <p className="text-xs text-merah-600">Mengunggah foto mempelai pria...</p>}
+                    {groomPhotoUrl && (
+                      <div className="h-24 w-full rounded-xl overflow-hidden bg-sage-100 border border-sage-200">
+                        <img src={groomPhotoUrl} alt="Preview Pria" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Foto Mempelai Wanita (Upload JPG)</label>
+                    <input
+                      type="file"
+                      accept=".jpg,image/jpeg"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleUploadBride(file);
+                      }}
+                      className="w-full p-3 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-sage-100 file:text-sage-700"
+                    />
+                    {isUploadingBride && <p className="text-xs text-merah-600">Mengunggah foto mempelai wanita...</p>}
+                    {bridePhotoUrl && (
+                      <div className="h-24 w-full rounded-xl overflow-hidden bg-sage-100 border border-sage-200">
+                        <img src={bridePhotoUrl} alt="Preview Wanita" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Jam Lokasi Mulai (Teks)</label>
+                    <input
+                      type="text"
+                      value={locationStartTimeText}
+                      onChange={(e) => setLocationStartTimeText(e.target.value)}
+                      className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                      placeholder="Contoh: 09.00 WIB"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Jam Lokasi Selesai (Teks)</label>
+                    <input
+                      type="text"
+                      value={locationEndTimeText}
+                      onChange={(e) => setLocationEndTimeText(e.target.value)}
+                      className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                      placeholder="Contoh: 13.00 WIB"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Love Story Editor */}
@@ -679,16 +1061,15 @@ export default function AdminDashboard() {
                         <Trash2 className="w-4 h-4" />
                       </button>
                       <input
-                        type="text"
-                        value={item.url}
+                        type="file"
+                        accept=".jpg,image/jpeg"
                         onChange={(e) => {
-                          const newGallery = [...gallery];
-                          newGallery[index].url = e.target.value;
-                          setGallery(newGallery);
+                          const file = e.target.files?.[0];
+                          if (file) handleUploadGallery(file, index);
                         }}
-                        className="w-full p-2 text-sm bg-sage-50 border border-sage-100 rounded-lg focus:outline-none"
-                        placeholder="Link Gambar (URL)"
+                        className="w-full p-2 text-sm bg-sage-50 border border-sage-100 rounded-lg focus:outline-none file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:bg-sage-100 file:text-sage-700"
                       />
+                      <p className="text-xs text-sage-500 italic">Upload-only JPG.</p>
                       {item.url && (
                         <div className="h-20 w-full rounded-xl overflow-hidden bg-sage-100">
                           <img src={item.url} alt="Preview" className="w-full h-full object-cover" />

@@ -1,18 +1,12 @@
-# Task: Fix TypeScript errors in Wedding-Habibie-Lala project
+# TODO - Upload Foto via Supabase Storage (Bucket `photo-kami`)
 
-## Current Status
-- [x] Identified TS error: `setWeddingEndTime` undefined in `app/admin/page.tsx`
-- [x] Analyzed files: `app/admin/page.tsx`, `lib/SettingsContext.tsx`
-- [x] User approved fix plan
-
-## Fix Steps
-- [ ] 1. Add missing imports (LoveStoryItem, GalleryItem) to `app/admin/page.tsx`
-- [ ] 2. Add missing useState declarations (weddingEndTime, loveStory, gallery, isSaving)
-- [ ] 3. Fix useEffect to properly sync local state from settings
-- [ ] 4. Remove unused `saveWeddingDate` function
-- [ ] 5. Verify fix with `npm run build`
-- [ ] 6. Test with `npm run dev`
-
-## Next Steps After Fix
-- [ ] Update TODO with completion status
-- [ ] Check for additional errors
+- [ ] Review struktur `app/admin/page.tsx` untuk section URL foto yang harus diganti upload-only
+- [ ] Tambah helper upload `.jpg` ke bucket `photo-kami` folder `public/*`
+- [ ] Ganti field Hero Image dari URL input menjadi file upload
+- [ ] Ganti field Groom Image dari URL input menjadi file upload
+- [ ] Ganti field Bride Image dari URL input menjadi file upload
+- [ ] Ubah Gallery menjadi upload-only (hapus input URL manual)
+- [ ] Pastikan hasil upload langsung update state URL untuk disimpan ke settings
+- [ ] Tambah validasi ekstensi `.jpg` di sisi client
+- [ ] Update progress checklist setelah implementasi
+- [ ] Jalankan validasi build (`npm run build`)
