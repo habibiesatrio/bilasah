@@ -71,6 +71,12 @@ export default function AdminDashboard() {
   const [bridePhotoUrl, setBridePhotoUrl] = useState<string>("");
   const [locationStartTimeText, setLocationStartTimeText] = useState<string>("");
   const [locationEndTimeText, setLocationEndTimeText] = useState<string>("");
+  const [giftTitle, setGiftTitle] = useState<string>("");
+  const [giftDescription, setGiftDescription] = useState<string>("");
+  const [giftMandiriAccount, setGiftMandiriAccount] = useState<string>("");
+  const [giftBcaAccount, setGiftBcaAccount] = useState<string>("");
+  const [giftShowMandiri, setGiftShowMandiri] = useState<boolean>(true);
+  const [giftShowBca, setGiftShowBca] = useState<boolean>(true);
   const [loveStory, setLoveStory] = useState<LoveStoryItem[]>([]);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -110,6 +116,12 @@ export default function AdminDashboard() {
       setBridePhotoUrl(settings.bride_photo_url || "");
       setLocationStartTimeText(settings.location_start_time_text || "");
       setLocationEndTimeText(settings.location_end_time_text || "");
+      setGiftTitle(settings.gift_title || "");
+      setGiftDescription(settings.gift_description || "");
+      setGiftMandiriAccount(settings.gift_mandiri_account || "");
+      setGiftBcaAccount(settings.gift_bca_account || "");
+      setGiftShowMandiri(settings.gift_show_mandiri ?? true);
+      setGiftShowBca(settings.gift_show_bca ?? true);
       setLoveStory(settings.love_story || []);
       setGallery(settings.gallery || []);
     }
@@ -220,7 +232,8 @@ export default function AdminDashboard() {
     try {
       const { error } = await supabase
         .from("settings")
-        .update({
+        .upsert({
+          id: "wedding_config",
           wedding_date: weddingDate,
           wedding_end_time: weddingEndTime,
           hero_date_text: heroDateText,
@@ -232,18 +245,23 @@ export default function AdminDashboard() {
           bride_photo_url: bridePhotoUrl,
           location_start_time_text: locationStartTimeText,
           location_end_time_text: locationEndTimeText,
+          gift_title: giftTitle,
+          gift_description: giftDescription,
+          gift_mandiri_account: giftMandiriAccount,
+          gift_bca_account: giftBcaAccount,
+          gift_show_mandiri: giftShowMandiri,
+          gift_show_bca: giftShowBca,
           love_story: loveStory,
           gallery: gallery,
           updated_at: new Date().toISOString()
-        })
-        .eq("id", "wedding_config");
+        }, { onConflict: 'id' });
 
       if (error) throw error;
       await refreshSettings();
       alert("Pengaturan berhasil disimpan!");
     } catch (error) {
       console.error("Error saving settings:", error);
-      alert("Gagal menyimpan pengaturan. Pastikan tabel 'settings' sudah dibuat.");
+      alert("Gagal menyimpan pengaturan. Pastikan tabel 'settings' sudah dibuat dan sudah memiliki row 'wedding_config'.");
     } finally {
       setIsSaving(false);
     }
@@ -959,6 +977,83 @@ export default function AdminDashboard() {
                       className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
                       placeholder="Contoh: 13.00 WIB"
                     />
+                  </div>
+                </div>
+
+                <div className="space-y-6 rounded-3xl border border-sage-100 bg-white/55 p-5">
+                  <div className="flex items-center justify-between">
+                    <h4 className="flex items-center text-lg font-bold text-sage-900">
+                      <Users className="w-5 h-5 mr-2 text-merah-600" />
+                      Gift / Hadiah Section
+                    </h4>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Judul Gift Section</label>
+                      <input
+                        type="text"
+                        value={giftTitle}
+                        onChange={(e) => setGiftTitle(e.target.value)}
+                        className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                        placeholder="Contoh: Untuk yang ingin memberikan hadiah"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Deskripsi Gift</label>
+                      <textarea
+                        value={giftDescription}
+                        onChange={(e) => setGiftDescription(e.target.value)}
+                        rows={3}
+                        className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm resize-y"
+                        placeholder="Tulis pesan untuk tamu yang ingin memberikan hadiah."
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">Mandiri Account</label>
+                        <input
+                          type="text"
+                          value={giftMandiriAccount}
+                          onChange={(e) => setGiftMandiriAccount(e.target.value)}
+                          className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                          placeholder="Contoh: 123-456-7890"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">BCA Account</label>
+                        <input
+                          type="text"
+                          value={giftBcaAccount}
+                          onChange={(e) => setGiftBcaAccount(e.target.value)}
+                          className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                          placeholder="Contoh: 098-765-4321"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <label className="flex items-center gap-3 p-4 bg-sage-50 border border-sage-200 rounded-2xl cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={giftShowMandiri}
+                          onChange={(e) => setGiftShowMandiri(e.target.checked)}
+                          className="h-4 w-4 text-merah-600 accent-merah-600"
+                        />
+                        <span className="text-sm font-medium text-sage-800">Tampilkan logo Mandiri</span>
+                      </label>
+                      <label className="flex items-center gap-3 p-4 bg-sage-50 border border-sage-200 rounded-2xl cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={giftShowBca}
+                          onChange={(e) => setGiftShowBca(e.target.checked)}
+                          className="h-4 w-4 text-merah-600 accent-merah-600"
+                        />
+                        <span className="text-sm font-medium text-sage-800">Tampilkan logo BCA</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

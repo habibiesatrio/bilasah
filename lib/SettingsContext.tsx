@@ -26,6 +26,12 @@ export interface WeddingSettings {
   bride_photo_url: string;
   location_start_time_text: string;
   location_end_time_text: string;
+  gift_title: string;
+  gift_description: string;
+  gift_mandiri_account: string;
+  gift_bca_account: string;
+  gift_show_mandiri: boolean;
+  gift_show_bca: boolean;
   love_story: LoveStoryItem[];
   gallery: GalleryItem[];
 }
@@ -64,6 +70,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           bride_photo_url: data.bride_photo_url || "",
           location_start_time_text: data.location_start_time_text || "",
           location_end_time_text: data.location_end_time_text || "",
+          gift_title: data.gift_title || "",
+          gift_description: data.gift_description || "",
+          gift_mandiri_account: data.gift_mandiri_account || "",
+          gift_bca_account: data.gift_bca_account || "",
+          gift_show_mandiri: data.gift_show_mandiri ?? true,
+          gift_show_bca: data.gift_show_bca ?? true,
           love_story: data.love_story || [],
           gallery: data.gallery || [],
         });
@@ -83,6 +95,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         bride_photo_url: "",
         location_start_time_text: "",
         location_end_time_text: "",
+        gift_title: "Untuk yang ingin memberikan hadiah",
+        gift_description: "Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.",
+        gift_mandiri_account: "",
+        gift_bca_account: "",
+        gift_show_mandiri: true,
+        gift_show_bca: true,
         love_story: [],
         gallery: [],
       });

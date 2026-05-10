@@ -20,6 +20,12 @@ create table if not exists public.settings (
   bride_photo_url text not null default '',
   location_start_time_text text not null default '',
   location_end_time_text text not null default '',
+  gift_title text not null default 'Untuk yang ingin memberikan hadiah',
+  gift_description text not null default 'Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.',
+  gift_mandiri_account text not null default '',
+  gift_bca_account text not null default '',
+  gift_show_mandiri boolean not null default true,
+  gift_show_bca boolean not null default true,
   love_story jsonb not null default '[]'::jsonb,
   gallery jsonb not null default '[]'::jsonb,
   updated_at timestamptz not null default now()
@@ -53,15 +59,38 @@ alter table public.settings
 alter table public.settings
   add column if not exists location_end_time_text text not null default '';
 
+alter table public.settings
+  add column if not exists gift_title text not null default 'Untuk yang ingin memberikan hadiah';
+
+alter table public.settings
+  add column if not exists gift_description text not null default 'Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.';
+
+alter table public.settings
+  add column if not exists gift_mandiri_account text not null default '';
+
+alter table public.settings
+  add column if not exists gift_bca_account text not null default '';
+
+alter table public.settings
+  add column if not exists gift_show_mandiri boolean not null default true;
+
+alter table public.settings
+  add column if not exists gift_show_bca boolean not null default true;
+
 -- 4) Ensure row used by app exists
 insert into public.settings (
   id, wedding_date, wedding_end_time, hero_date_text, hero_image_url,
   hero_quote_bottom, music_url, music_title, groom_photo_url, bride_photo_url,
-  location_start_time_text, location_end_time_text, love_story, gallery, updated_at
+  location_start_time_text, location_end_time_text, gift_title, gift_description,
+  gift_mandiri_account, gift_bca_account, gift_show_mandiri, gift_show_bca, love_story, gallery, updated_at
 )
 values (
   'wedding_config', '2026-04-23T09:00:00+07', '2026-04-23T13:00:00+07',
-  '23 April 2026', '', '', '', '', '', '', '', '', '[]'::jsonb, '[]'::jsonb, now()
+  '23 April 2026', '', '', '', '', '', '', '', '',
+  'Untuk yang ingin memberikan hadiah',
+  'Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.',
+  '', '', true, true,
+  '[]'::jsonb, '[]'::jsonb, now()
 )
 on conflict (id) do update
 set
@@ -76,6 +105,12 @@ set
   bride_photo_url = coalesce(public.settings.bride_photo_url, excluded.bride_photo_url),
   location_start_time_text = coalesce(public.settings.location_start_time_text, excluded.location_start_time_text),
   location_end_time_text = coalesce(public.settings.location_end_time_text, excluded.location_end_time_text),
+  gift_title = coalesce(public.settings.gift_title, excluded.gift_title),
+  gift_description = coalesce(public.settings.gift_description, excluded.gift_description),
+  gift_mandiri_account = coalesce(public.settings.gift_mandiri_account, excluded.gift_mandiri_account),
+  gift_bca_account = coalesce(public.settings.gift_bca_account, excluded.gift_bca_account),
+  gift_show_mandiri = coalesce(public.settings.gift_show_mandiri, excluded.gift_show_mandiri),
+  gift_show_bca = coalesce(public.settings.gift_show_bca, excluded.gift_show_bca),
   love_story = coalesce(public.settings.love_story, excluded.love_story),
   gallery = coalesce(public.settings.gallery, excluded.gallery),
   updated_at = now();

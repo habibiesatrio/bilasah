@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Guestbook from "@/components/Guestbook";
+import GiftSection from "@/components/GiftSection";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import Gallery from "@/components/Gallery";
@@ -164,6 +165,13 @@ export default function Home() {
             {/* Location Section */}
             <section id="location">
               <Location />
+            </section>
+
+            {/* Gift Section */}
+            <section id="gift" className="py-24 bg-[#f7efe1]">
+              <div className="max-w-4xl mx-auto px-4">
+                <GiftSection />
+              </div>
             </section>
 
             {/* Guestbook Section */}
