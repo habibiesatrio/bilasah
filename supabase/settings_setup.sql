@@ -20,10 +20,12 @@ create table if not exists public.settings (
   bride_photo_url text not null default '',
   location_start_time_text text not null default '',
   location_end_time_text text not null default '',
-  gift_title text not null default 'Untuk yang ingin memberikan hadiah',
-  gift_description text not null default 'Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.',
+  gift_title text not null default 'Kehadiran dan doa restu Anda merupakan hadiah terindah bagi kami',
+  gift_description text not null default 'Namun apabila berkenan memberikan tanda kasih, dapat melalui rekening berikut:',
   gift_mandiri_account text not null default '',
+  gift_mandiri_holder text not null default '',
   gift_bca_account text not null default '',
+  gift_bca_holder text not null default '',
   gift_show_mandiri boolean not null default true,
   gift_show_bca boolean not null default true,
   love_story jsonb not null default '[]'::jsonb,
@@ -60,16 +62,22 @@ alter table public.settings
   add column if not exists location_end_time_text text not null default '';
 
 alter table public.settings
-  add column if not exists gift_title text not null default 'Untuk yang ingin memberikan hadiah';
+  add column if not exists gift_title text not null default '';
 
 alter table public.settings
-  add column if not exists gift_description text not null default 'Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.';
+  add column if not exists gift_description text not null default '';
 
 alter table public.settings
   add column if not exists gift_mandiri_account text not null default '';
 
 alter table public.settings
+  add column if not exists gift_mandiri_holder text not null default '';
+
+alter table public.settings
   add column if not exists gift_bca_account text not null default '';
+
+alter table public.settings
+  add column if not exists gift_bca_holder text not null default '';
 
 alter table public.settings
   add column if not exists gift_show_mandiri boolean not null default true;
@@ -82,14 +90,15 @@ insert into public.settings (
   id, wedding_date, wedding_end_time, hero_date_text, hero_image_url,
   hero_quote_bottom, music_url, music_title, groom_photo_url, bride_photo_url,
   location_start_time_text, location_end_time_text, gift_title, gift_description,
-  gift_mandiri_account, gift_bca_account, gift_show_mandiri, gift_show_bca, love_story, gallery, updated_at
+  gift_mandiri_account, gift_mandiri_holder, gift_bca_account, gift_bca_holder,
+  gift_show_mandiri, gift_show_bca, love_story, gallery, updated_at
 )
 values (
   'wedding_config', '2026-04-23T09:00:00+07', '2026-04-23T13:00:00+07',
   '23 April 2026', '', '', '', '', '', '', '', '',
   'Untuk yang ingin memberikan hadiah',
   'Bagi tamu yang ingin memberi kado, silakan gunakan transfer bank di bawah ini. Terima kasih atas doa dan kebaikan Anda.',
-  '', '', true, true,
+  '', '', '', '', true, true,
   '[]'::jsonb, '[]'::jsonb, now()
 )
 on conflict (id) do update
@@ -108,7 +117,9 @@ set
   gift_title = coalesce(public.settings.gift_title, excluded.gift_title),
   gift_description = coalesce(public.settings.gift_description, excluded.gift_description),
   gift_mandiri_account = coalesce(public.settings.gift_mandiri_account, excluded.gift_mandiri_account),
+  gift_mandiri_holder = coalesce(public.settings.gift_mandiri_holder, excluded.gift_mandiri_holder),
   gift_bca_account = coalesce(public.settings.gift_bca_account, excluded.gift_bca_account),
+  gift_bca_holder = coalesce(public.settings.gift_bca_holder, excluded.gift_bca_holder),
   gift_show_mandiri = coalesce(public.settings.gift_show_mandiri, excluded.gift_show_mandiri),
   gift_show_bca = coalesce(public.settings.gift_show_bca, excluded.gift_show_bca),
   love_story = coalesce(public.settings.love_story, excluded.love_story),

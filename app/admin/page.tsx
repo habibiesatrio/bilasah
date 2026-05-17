@@ -74,7 +74,9 @@ export default function AdminDashboard() {
   const [giftTitle, setGiftTitle] = useState<string>("");
   const [giftDescription, setGiftDescription] = useState<string>("");
   const [giftMandiriAccount, setGiftMandiriAccount] = useState<string>("");
+  const [giftMandiriHolder, setGiftMandiriHolder] = useState<string>("");
   const [giftBcaAccount, setGiftBcaAccount] = useState<string>("");
+  const [giftBcaHolder, setGiftBcaHolder] = useState<string>("");
   const [giftShowMandiri, setGiftShowMandiri] = useState<boolean>(true);
   const [giftShowBca, setGiftShowBca] = useState<boolean>(true);
   const [loveStory, setLoveStory] = useState<LoveStoryItem[]>([]);
@@ -119,7 +121,9 @@ export default function AdminDashboard() {
       setGiftTitle(settings.gift_title || "");
       setGiftDescription(settings.gift_description || "");
       setGiftMandiriAccount(settings.gift_mandiri_account || "");
+      setGiftMandiriHolder(settings.gift_mandiri_holder || "");
       setGiftBcaAccount(settings.gift_bca_account || "");
+      setGiftBcaHolder(settings.gift_bca_holder || "");
       setGiftShowMandiri(settings.gift_show_mandiri ?? true);
       setGiftShowBca(settings.gift_show_bca ?? true);
       setLoveStory(settings.love_story || []);
@@ -248,7 +252,9 @@ export default function AdminDashboard() {
           gift_title: giftTitle,
           gift_description: giftDescription,
           gift_mandiri_account: giftMandiriAccount,
+          gift_mandiri_holder: giftMandiriHolder,
           gift_bca_account: giftBcaAccount,
+          gift_bca_holder: giftBcaHolder,
           gift_show_mandiri: giftShowMandiri,
           gift_show_bca: giftShowBca,
           love_story: loveStory,
@@ -1021,6 +1027,13 @@ export default function AdminDashboard() {
                           className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
                           placeholder="Contoh: 123-456-7890"
                         />
+                        <input
+                          type="text"
+                          value={giftMandiriHolder}
+                          onChange={(e) => setGiftMandiriHolder(e.target.value)}
+                          className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                          placeholder="Nama pemilik rekening"
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-sage-700 uppercase tracking-widest">BCA Account</label>
@@ -1030,6 +1043,13 @@ export default function AdminDashboard() {
                           onChange={(e) => setGiftBcaAccount(e.target.value)}
                           className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
                           placeholder="Contoh: 098-765-4321"
+                        />
+                        <input
+                          type="text"
+                          value={giftBcaHolder}
+                          onChange={(e) => setGiftBcaHolder(e.target.value)}
+                          className="w-full p-4 bg-white/80 border border-sage-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-merah-500/20 focus:border-merah-500 transition-all text-sm"
+                          placeholder="Nama pemilik rekening"
                         />
                       </div>
                     </div>

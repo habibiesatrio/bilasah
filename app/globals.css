@@ -2,62 +2,22 @@
 @source "./";
 @source "../components";
 @source "../lib";
-@theme {
-    --color-sage-50: #f4f7f4;
-    --color-sage-100: #e5ede5;
-    --color-sage-200: #ceddce;
-    --color-sage-300: #aac2aa;
-    --color-sage-400: #80a180;
-    --color-sage-500: #648464;
-    --color-sage-600: #4d694d;
-    --color-sage-700: #3f543f;
-    --color-sage-800: #354435;
-    --color-sage-900: #2d3a2d;
-    --color-sage-950: #181f18;
-    --color-merah-50: #fef2f2;
-    --color-merah-100: #fee2e2;
-    --color-merah-200: #fecaca;
-    --color-merah-300: #fca5a5;
-    --color-merah-400: #f87171;
-    --color-merah-500: #ef4444;
-    --color-merah-600: #dc2626;
-    --color-merah-700: #b91c1c;
-    --color-merah-800: #991b1b;
-    --color-merah-900: #7f1d1d;
-    --color-merah-950: #450a0a;
-    --color-biru-50: #eff6ff;
-    --color-biru-100: #dbeafe;
-    --color-biru-200: #bfdbfe;
-    --color-biru-300: #93c5fd;
-    --color-biru-400: #60a5fa;
-    --color-biru-500: #3b82f6;
-    --color-biru-600: #2563eb;
-    --color-biru-700: #1d4ed8;
-    --color-biru-800: #1e40af;
-    --color-biru-900: #1e3a8a;
-    --color-biru-950: #172554;
-    --color-hijau-50: #ecfdf5;
-    --color-hijau-100: #d1fae5;
-    --color-hijau-200: #a7f3d0;
-    --color-hijau-300: #6ee7b7;
-    --color-hijau-400: #34d399;
-    --color-hijau-500: #10b981;
-    --color-hijau-600: #059669;
-    --color-hijau-700: #047857;
-    --color-hijau-800: #065f46;
-    --color-hijau-900: #064e3b;
-    --color-hijau-950: #022c22;
-    --color-jawa-ivory: #f8f3e8;
-    --color-jawa-cream: #f2e8d5;
-    --color-jawa-brown: #6b4f3a;
-    --color-jawa-dark: #3b2a1f;
-    --color-jawa-gold: #b68a4c;
-    --color-jawa-maroon: #7a2e2e;
-}
-
 :root {
-    --background: #f8f3e8;
-    --foreground: #3b2a1f;
+    --background: #F5F1E8;
+    --foreground: #5D4E37;
+    --color-palette-ivory: #E5D4B8;
+    --color-palette-dusty-blue: #5F7FA8;
+    --color-palette-butter-yellow: #D4AF37;
+    --color-palette-sage-green: #7BA876;
+    --color-palette-walnut-wood: #5D4E37;
+    --color-palette-gold-accent: #C89B7B;
+    --color-palette-warm-white: #F5F1E8;
+    --color-jawa-ivory: #E5D4B8;
+    --color-jawa-cream: #F5F1E8;
+    --color-jawa-brown: #5D4E37;
+    --color-jawa-dark: #3b2a1f;
+    --color-jawa-gold: #C89B7B;
+    --color-jawa-maroon: #7BA876;
 }
 
 body {
@@ -67,21 +27,21 @@ body {
 }
 
 @utility glassmorphism {
-    background-color: rgba(248, 243, 232, 0.7);
+    background-color: rgba(245, 241, 232, 0.7);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(182, 138, 76, 0.25);
+    border: 1px solid rgba(200, 155, 123, 0.25);
     border-radius: 1rem;
     box-shadow: 0 20px 25px -5px rgb(59 42 31 / 0.12), 0 8px 10px -6px rgb(59 42 31 / 0.12);
 }
 
 @utility jawa-pattern {
-    background-color: #f8f3e8;
-    background-image: radial-gradient(circle at 25% 25%, rgba(182, 138, 76, 0.08) 0, rgba(182, 138, 76, 0.08) 2px, transparent 2px), radial-gradient(circle at 75% 75%, rgba(122, 46, 46, 0.06) 0, rgba(122, 46, 46, 0.06) 2px, transparent 2px), linear-gradient(135deg, rgba(182, 138, 76, 0.04) 25%, transparent 25%, transparent 50%, rgba(182, 138, 76, 0.04) 50%, rgba(182, 138, 76, 0.04) 75%, transparent 75%, transparent);
+    background-color: #F5F1E8;
+    background-image: radial-gradient(circle at 25% 25%, rgba(200, 155, 123, 0.08) 0, rgba(200, 155, 123, 0.08) 2px, transparent 2px), radial-gradient(circle at 75% 75%, rgba(123, 168, 118, 0.06) 0, rgba(123, 168, 118, 0.06) 2px, transparent 2px), linear-gradient(135deg, rgba(200, 155, 123, 0.04) 25%, transparent 25%, transparent 50%, rgba(200, 155, 123, 0.04) 50%, rgba(200, 155, 123, 0.04) 75%, transparent 75%, transparent);
     background-size: 28px 28px, 28px 28px, 36px 36px;
     background-position: 0 0, 14px 14px, 0 0;
 }
 
 @utility jawa-frame {
-    border: 1px solid rgba(182, 138, 76, 0.35);
+    border: 1px solid rgba(200, 155, 123, 0.35);
     box-shadow: 0 10px 35px rgba(59, 42, 31, 0.12);
 }

@@ -9,6 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Design palette colors
+        palette: {
+          ivory: "#E5D4B8",           // Ivory / Champagne
+          "dusty-blue": "#5F7FA8",    // Dusty Blue
+          "butter-yellow": "#D4AF37", // Butter Yellow
+          "sage-green": "#7BA876",    // Sage Green
+          "walnut-wood": "#5D4E37",   // Walnut Wood
+          "gold-accent": "#C89B7B",   // Gold Accent
+          "warm-white": "#F5F1E8",    // Warm White
+        },
         sage: {
           "50": "#f4f7f4",
           "100": "#e5ede5",

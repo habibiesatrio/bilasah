@@ -52,9 +52,9 @@ export default function Countdown() {
       {items.map((item, index) => (
         <motion.div
           key={item.label}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
+          transition={{ delay: index * 0.08 }}
           className="glassmorphism jawa-frame bg-[#f8f3e8]/80 backdrop-blur-md p-4 md:p-6 text-center border border-jawa-gold/35"
         >
           <span className="block text-2xl md:text-4xl font-bold text-jawa-maroon font-serif">

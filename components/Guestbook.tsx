@@ -263,9 +263,9 @@ function GuestbookContent() {
                   <AnimatePresence>
                     {formData.attendance === "Hadir" && (
                       <motion.div
-                        initial={{ opacity: 0, x: 20 }}
+                        initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
+                        exit={{ opacity: 0, x: 10 }}
                         className="space-y-2"
                       >
                         <label htmlFor="guest_count" className="block text-sm font-medium text-sage-900 ml-1">
@@ -313,8 +313,10 @@ function GuestbookContent() {
                     type="submit"
                     disabled={submitting}
                     className={cn(
-                      "inline-flex items-center px-10 py-4 border border-transparent text-base font-bold rounded-2xl shadow-lg text-white transition-all duration-200",
-                      submitting ? "bg-sage-400 cursor-not-allowed" : "bg-merah-700 hover:bg-merah-800"
+                      "inline-flex items-center px-10 py-4 border border-transparent text-base font-bold rounded-2xl shadow-lg transition-all duration-200",
+                      submitting
+                        ? "bg-slate-900/70 text-white cursor-not-allowed"
+                        : "bg-slate-900 text-white hover:bg-black"
                     )}
                   >
                     {submitting ? (
@@ -360,7 +362,7 @@ function GuestbookContent() {
                   {messages.map((msg, index) => (
                     <motion.div
                       key={msg.id}
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
@@ -368,7 +370,7 @@ function GuestbookContent() {
                     >
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-merah-500 to-sage-400 flex items-center justify-center text-white font-bold text-lg">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5D4E37] via-[#C89B7B] to-[#7BA876] flex items-center justify-center text-white font-semibold text-lg shadow-inner border border-[#C89B7B]/40">
                             {msg.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="flex flex-col">

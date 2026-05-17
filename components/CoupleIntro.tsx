@@ -16,13 +16,16 @@ export default function CoupleIntro() {
   }, [settings?.groom_photo_url, settings?.bride_photo_url]);
 
   return (
-    <section className="py-24 px-6 bg-jawa-ivory jawa-pattern">
+    <section className="relative overflow-hidden pt-12 pb-24 px-6 bg-jawa-ivory jawa-pattern">
+      <div className="pointer-events-none absolute -top-10 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-[#e8d2be]/40 blur-3xl" />
+      <div className="pointer-events-none absolute top-20 right-8 h-36 w-36 rounded-full bg-[#a68b73]/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-4 left-6 h-32 w-32 rounded-full bg-[#8c7c5e]/15 blur-3xl" />
       <div className="max-w-6xl mx-auto space-y-14">
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.65 }}
           className="text-center space-y-4"
         >
           <p className="text-jawa-maroon text-sm md:text-base tracking-[0.18em] uppercase font-semibold">
@@ -39,10 +42,10 @@ export default function CoupleIntro() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
           <motion.article
-            initial={{ opacity: 0, x: -24 }}
+            initial={{ opacity: 0, x: -14 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.65 }}
             className="rounded-3xl border border-jawa-gold/35 bg-jawa-cream/90 shadow-lg p-8 md:p-10 text-center space-y-4 jawa-frame"
           >
             <div className="mx-auto w-32 h-32 rounded-full p-1.5 bg-gradient-to-b from-jawa-gold/70 via-[#ead6b0] to-jawa-maroon/70 shadow-xl">
@@ -79,10 +82,10 @@ export default function CoupleIntro() {
           </motion.article>
 
           <motion.article
-            initial={{ opacity: 0, x: 24 }}
+            initial={{ opacity: 0, x: 14 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.65 }}
             className="rounded-3xl border border-jawa-gold/35 bg-jawa-cream/90 shadow-lg p-8 md:p-10 text-center space-y-4 jawa-frame"
           >
             <div className="mx-auto w-32 h-32 rounded-full p-1.5 bg-gradient-to-b from-jawa-gold/70 via-[#ead6b0] to-jawa-maroon/70 shadow-xl">
@@ -113,7 +116,7 @@ export default function CoupleIntro() {
               S.H.
             </p>
             <p className="text-jawa-brown/95 leading-relaxed">
-              Putri Satu-satunya dari Bapak <span className="font-semibold">H. Mochamad Ainuljakin, S.H.</span> &amp; Ibu{" "}
+              Putri tunggal dari Bapak <span className="font-semibold">H. Mochamad Ainuljakin, S.H.</span> &amp; Ibu{" "}
               <span className="font-semibold">Dra. Hj. Sri Harlina</span>
             </p>
           </motion.article>

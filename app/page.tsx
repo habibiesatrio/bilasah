@@ -36,6 +36,13 @@ export default function Home() {
   const convertedHeroImageUrl = toDirectImageUrl(rawHeroImageUrl);
   const heroImageUrl = convertedHeroImageUrl || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop";
   const heroQuoteBottom = settings?.hero_quote_bottom || "";
+  const weddingDate = settings?.wedding_date ? new Date(settings.wedding_date) : new Date("2026-06-07");
+  const weddingDateLabel = weddingDate.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
 
   return (
     <main className="min-h-screen selection:bg-[#e8d4b2] selection:text-jawa-dark bg-jawa-ivory jawa-pattern overflow-x-hidden">
@@ -63,16 +70,16 @@ export default function Home() {
         ) : (
           <motion.div
             key="content"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
             className="space-y-0"
           >
             <MusicPlayer src={settings?.music_url || ""} title={settings?.music_title || ""} />
 
             {/* Header */}
             <section
-              className="relative min-h-[72vh] py-16 flex flex-col items-center justify-center text-center space-y-8 bg-cover bg-center bg-fixed"
+              className="relative min-h-[72vh] pt-16 pb-8 flex flex-col items-center justify-center text-center space-y-8 bg-cover bg-center bg-fixed"
               style={{ backgroundImage: `url('${heroImageUrl}')` }}
             >
               <div className="absolute inset-0 bg-gradient-to-b from-[#2f2118]/75 via-[#3b2a1f]/65 to-[#2a1d14]/75 backdrop-blur-[2px]" />
@@ -108,22 +115,14 @@ export default function Home() {
               </motion.div>
             </section>
 
-            {/* Decorative transition to Countdown */}
-            <div className="relative h-24 -mt-6 bg-gradient-to-b from-[#2f2118]/92 via-[#4a3a2f]/75 to-jawa-ivory overflow-hidden">
-              <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-jawa-gold/55 to-transparent" />
-              <svg
-                className="absolute -bottom-1 left-0 w-full h-24 text-jawa-ivory"
-                viewBox="0 0 1440 140"
-                fill="currentColor"
-                preserveAspectRatio="none"
-              >
-                <path d="M0,72 C220,120 420,22 720,52 C980,78 1180,130 1440,66 L1440,140 L0,140 Z" />
-              </svg>
-            </div>
+            {/* Couple Intro Section */}
+            <section id="couple-intro" className="relative -mt-16">
+              <CoupleIntro />
+            </section>
 
-            {/* Countdown Section + Integrated Bottom Divider */}
-            <section className="relative z-20 -mt-16 mb-24 px-4">
-              <div className="max-w-5xl mx-auto rounded-[2rem] border border-jawa-gold/35 bg-[#f8f3e8]/88 shadow-xl backdrop-blur-sm jawa-frame overflow-hidden">
+            {/* Countdown Section (moved down above Location) */}
+            <section className="relative z-20 mb-12 px-4">
+              <div className="max-w-5xl mx-auto rounded-[2rem] border border-jawa-gold/35 bg-[#f8f3e8]/90 shadow-xl backdrop-blur-sm jawa-frame overflow-hidden">
                 <div className="px-6 md:px-10 pt-8 md:pt-10 pb-3 text-center space-y-3">
                   <div className="flex items-center justify-center gap-3">
                     <span className="w-10 md:w-16 h-[1px] bg-jawa-gold/60" />
@@ -137,29 +136,24 @@ export default function Home() {
                   </h3>
                 </div>
 
-                <div className="px-2 md:px-4 pb-6 md:pb-8">
+                <div className="px-2 md:px-4 pb-4 md:pb-6">
                   <Countdown />
                 </div>
 
+                <div className="px-6 md:px-10 pb-6 md:pb-8">
+                  <p className="mx-auto max-w-2xl text-center text-sm md:text-base uppercase tracking-[0.24em] text-jawa-brown/75 font-semibold">
+                    {weddingDateLabel}
+                  </p>
+                </div>
+
                 <div className="relative px-6 md:px-10 pb-6 md:pb-8">
-                  <div className="h-px bg-gradient-to-r from-transparent via-jawa-gold/60 to-transparent" />
-                  <div className="mt-3 flex items-center justify-center gap-3">
-                    <span className="w-8 md:w-12 h-[1px] bg-jawa-gold/55" />
-                    <span className="text-jawa-maroon/75 text-xs">❦</span>
-                    <span className="w-8 md:w-12 h-[1px] bg-jawa-gold/55" />
+                  <div className="mx-auto flex items-center justify-center gap-3">
+                    <div className="h-px w-24 bg-jawa-gold/40" />
+                    <span className="text-jawa-maroon/70 text-xs uppercase tracking-[0.35em]">❦</span>
+                    <div className="h-px w-24 bg-jawa-gold/40" />
                   </div>
                 </div>
               </div>
-            </section>
-
-            {/* Couple Intro Section */}
-            <section id="couple-intro">
-              <CoupleIntro />
-            </section>
-
-            {/* Gallery Section */}
-            <section id="gallery" className="bg-jawa-ivory">
-              <Gallery />
             </section>
 
             {/* Location Section */}
@@ -181,8 +175,13 @@ export default function Home() {
               </div>
             </section>
 
+            {/* Gallery Section */}
+            <section id="gallery" className="bg-jawa-ivory">
+              <Gallery />
+            </section>
+
             {/* Footer */}
-            <footer className="py-20 bg-jawa-cream text-center border-t border-jawa-gold/30 jawa-pattern">
+            <footer className="py-16 md:py-20 bg-jawa-cream text-center jawa-pattern">
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -197,9 +196,18 @@ export default function Home() {
                 <p className="text-jawa-brown font-medium max-w-sm mx-auto leading-relaxed">
                   Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir.
                 </p>
-                <div className="pt-8">
-                  <p className="text-jawa-brown/70 text-[10px] uppercase tracking-[0.4em]">© 2026 Wedding Invitation</p>
-                  <p className="text-jawa-brown/60 text-[9px] mt-2 italic font-light">Created with love</p>
+                <div className="pt-6 space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="text-jawa-maroon font-semibold tracking-[0.28em] uppercase text-sm hover:text-jawa-dark transition"
+                  >
+                    #BiLaSah
+                  </button>
+                  <div>
+                    <p className="text-jawa-brown/70 text-[10px] uppercase tracking-[0.4em]">© 2026 Wedding Invitation</p>
+                    <p className="text-jawa-brown/60 text-[9px] mt-2 italic font-light">Created with love</p>
+                  </div>
                 </div>
               </motion.div>
             </footer>

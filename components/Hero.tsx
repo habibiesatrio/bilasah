@@ -62,9 +62,9 @@ export default function Hero({ onOpen }: HeroProps) {
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-2xl mx-auto space-y-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
           className="space-y-4"
         >
           <motion.div
@@ -73,7 +73,7 @@ export default function Hero({ onOpen }: HeroProps) {
             transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
             className="flex justify-center"
           >
-            <Heart className="w-8 h-8 text-merah-400 fill-merah-400/20" />
+            <Heart className="w-8 h-8 text-[#7BA876] fill-[#7BA876]/20" />
           </motion.div>
 
           <p className="uppercase tracking-[0.4em] text-white/80 text-xs md:text-sm font-medium">
